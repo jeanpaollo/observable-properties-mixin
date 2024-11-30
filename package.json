@@ -1,6 +1,6 @@
 {
   "name": "observable-properties-mixin",
-  "version": "2.0.0",
+  "version": "2.1.3",
   "description": "Features to generate observable properties mixin",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -38,6 +38,7 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
+    "chained-event-implementations": "^1.1.2",
     "observable-properties-mixin": "file:",
     "rxjs": "^7.8.1"
   }

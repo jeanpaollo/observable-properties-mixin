@@ -153,6 +153,16 @@ describe(`Test of ${observablePropertiesMixin.name}`, () => {
 
     expect(AnotherClass.x).not.toEqual(Clazz.x);
   });
+
+  it(`instances with differente properties:`, () => {
+    class X extends observablePropertiesMixin({ x: "Teste", y: 2 }) {}
+
+    const a = new X();
+    const b = new X();
+
+    expect(a.x$).not.toEqual(b.x$);
+    expect(a.y$).not.toEqual(b.y$);
+  });
 });
 
 describe(`Test of ${observableInstancePropertiesMixin.name}`, () => {
@@ -162,6 +172,7 @@ describe(`Test of ${observableInstancePropertiesMixin.name}`, () => {
     }) {}
 
     const instance = new Clazz();
+
     runGeneralInstanceTests(instance);
   });
 
@@ -176,5 +187,29 @@ describe(`Test of ${observableInstancePropertiesMixin.name}`, () => {
     instance.b = b;
     expect(instance.b).toEqual(b);
     instance.b$.pipe(first()).subscribe((_) => expect(_).toEqual(b));
+  });
+
+  it("with property overriding:", () => {
+    const plus = 10;
+
+    class Clazz extends observableInstancePropertiesMixin({
+      ...instanceTemplate,
+    }) {
+      get b() {
+        return super.b + plus;
+      }
+
+      set b(value) {
+        super.b = value;
+      }
+    }
+
+    const instance = new Clazz();
+    const { b } = instance;
+
+    expect(b).toEqual(instanceTemplate.b + plus);
+    instance.b$
+      .pipe(first())
+      .subscribe((_) => expect(_).toEqual(instanceTemplate.b));
   });
 });
