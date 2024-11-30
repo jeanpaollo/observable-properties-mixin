@@ -177,4 +177,28 @@ describe(`Test of ${observableInstancePropertiesMixin.name}`, () => {
     expect(instance.b).toEqual(b);
     instance.b$.pipe(first()).subscribe((_) => expect(_).toEqual(b));
   });
+
+  it("with property overriding:", () => {
+    const plus = 10;
+
+    class Clazz extends observableInstancePropertiesMixin({
+      ...instanceTemplate,
+    }) {
+      get b() {
+        return super.b + plus;
+      }
+
+      set b(value) {
+        super.b = value;
+      }
+    }
+
+    const instance = new Clazz();
+    const { b } = instance;
+
+    expect(b).toEqual(instanceTemplate.b + plus);
+    instance.b$
+      .pipe(first())
+      .subscribe((_) => expect(_).toEqual(instanceTemplate.b));
+  });
 });
